@@ -235,7 +235,7 @@ public class PagoFacil extends javax.swing.JFrame {
             Conexion con = new Conexion();
             con.ConexionMySQL();
 
-            String query = "SELECT * FROM `cartera_npl` WHERE `cuidad` = '" + busqueda_txtx.getText() + "'";
+            String query = "SELECT * FROM `cartera_npl` WHERE `id` OR `cuidad` = '" + busqueda_txtx.getText() + "'";
             java.sql.ResultSet rs = con.consultar(query);
 
             String data[][] = {};
