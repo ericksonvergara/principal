@@ -41,6 +41,8 @@ public class PagoFacil extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        busqueda_txtx = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -54,7 +56,7 @@ public class PagoFacil extends javax.swing.JFrame {
             }
         });
 
-        btn_buscar.setText("Buscar");
+        btn_buscar.setText("Examinar..");
         btn_buscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_buscarActionPerformed(evt);
@@ -83,6 +85,13 @@ public class PagoFacil extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("jButton3");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -93,20 +102,22 @@ public class PagoFacil extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(81, 81, 81)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(buscar_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(29, 29, 29)
-                                .addComponent(jButton2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton1)))
+                        .addGap(34, 34, 34)
+                        .addComponent(jButton2)
+                        .addGap(67, 67, 67)
+                        .addComponent(jButton1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(81, 81, 81)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(buscar_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(busqueda_txtx, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(22, 22, 22)
-                        .addComponent(btn_buscar)
-                        .addGap(0, 70, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(btn_buscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 63, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -118,11 +129,15 @@ public class PagoFacil extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(buscar_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btn_buscar))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(busqueda_txtx, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton1))
-                .addGap(41, 41, 41)
+                .addGap(27, 27, 27)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -165,12 +180,13 @@ public class PagoFacil extends javax.swing.JFrame {
             Conexion con = new Conexion();
             con.ConexionMySQL();
             
-            String query = "SELECT * FROM ingreso";
+            String query = "SELECT * FROM cartera_npl ";
             //String query1 = "SELECT * FROM `recaudo` WHERE `valor`=10000";
             java.sql.ResultSet rs = con.consultar(query);
             
             String data[][] = {};
-            String col[] = {"Factura", "Valor", "Valor_adicional", "Cajero", "Transaccion", "Fecha_de_pago","Tipo"};
+            String col[] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta","departamento", "cuidad", "saldo", "edad_mora",
+                "datacredito", "registro_pago", "pagopazysalvo", "valor", "Fecha"};
             model = new DefaultTableModel(data, col);
             jTable1.setModel(model);
              
@@ -178,13 +194,21 @@ public class PagoFacil extends javax.swing.JFrame {
 
             while (rs.next()) {
                 model.insertRow(con1, new Object[]{}); //INSERTA FILA EN TIEMPO DE EJECUCION
-                model.setValueAt(rs.getString("Factura"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
-                model.setValueAt(rs.getString("Valor"), con1, 1);
-                model.setValueAt(rs.getString("Valor_adicional"), con1, 2);
-                model.setValueAt(rs.getString("Cajero"), con1, 3);
-                model.setValueAt(rs.getString("Transaccion"), con1, 4);
-                model.setValueAt(rs.getString("fecha_de_pago"), con1, 5);
-                model.setValueAt(rs.getString("Tipo"), con1, 6);        
+                model.setValueAt(rs.getString("id"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
+                model.setValueAt(rs.getString("aliado"), con1, 1);
+                model.setValueAt(rs.getString("operacion"), con1, 2);
+                model.setValueAt(rs.getString("cedula"), con1, 3);
+                model.setValueAt(rs.getString("nombre"), con1, 4);
+                model.setValueAt(rs.getString("cuenta"), con1, 5);
+                model.setValueAt(rs.getString("departamento"), con1, 6);  
+                model.setValueAt(rs.getString("cuidad"), con1, 7);
+                model.setValueAt(rs.getString("saldo"), con1, 8);
+                model.setValueAt(rs.getString("edad_mora"), con1, 9);
+                model.setValueAt(rs.getString("datacredito"), con1, 10);
+                model.setValueAt(rs.getString("registro_pago"), con1, 11);
+                model.setValueAt(rs.getString("pagopazysalvo"), con1, 12);
+                model.setValueAt(rs.getString("valor"), con1, 13);
+                model.setValueAt(rs.getString("Fecha"), con1, 14);
             }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
@@ -197,6 +221,57 @@ public class PagoFacil extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        int con1 = 0;
+        try {
+            // TODO add your handling code here:
+            
+            Conexion con = new Conexion();
+            con.ConexionMySQL();
+            
+            String query = "SELECT * FROM `cartera_npl` WHERE `cuidad` = '"+busqueda_txtx.getText()+"'";
+            java.sql.ResultSet rs = con.consultar(query);
+            
+            String data [][] = {};
+            String col [] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta","departamento", "cuidad", "saldo", "edad_mora",
+                "datacredito", "registro_pago", "pagopazysalvo", "valor", "Fecha"};
+            model = new DefaultTableModel(data, col);
+            jTable1.setModel(model);
+            
+            while(rs.next()){
+                model.insertRow(con1, new Object[]{});
+                model.setValueAt(rs.getString("id"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
+                model.setValueAt(rs.getString("aliado"), con1, 1);
+                model.setValueAt(rs.getString("operacion"), con1, 2);
+                model.setValueAt(rs.getString("cedula"), con1, 3);
+                model.setValueAt(rs.getString("nombre"), con1, 4);
+                model.setValueAt(rs.getString("cuenta"), con1, 5);
+                model.setValueAt(rs.getString("departamento"), con1, 6);  
+                model.setValueAt(rs.getString("cuidad"), con1, 7);
+                model.setValueAt(rs.getString("saldo"), con1, 8);
+                model.setValueAt(rs.getString("edad_mora"), con1, 9);
+                model.setValueAt(rs.getString("datacredito"), con1, 10);
+                model.setValueAt(rs.getString("registro_pago"), con1, 11);
+                model.setValueAt(rs.getString("pagopazysalvo"), con1, 12);
+                model.setValueAt(rs.getString("valor"), con1, 13);
+                model.setValueAt(rs.getString("Fecha"), con1, 14);
+                
+            
+            }
+            
+            
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -236,8 +311,10 @@ public class PagoFacil extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_buscar;
     private javax.swing.JTextField buscar_txt;
+    private javax.swing.JTextField busqueda_txtx;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
