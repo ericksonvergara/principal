@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -17,7 +18,9 @@ import javax.swing.table.DefaultTableModel;
  * @author erickson.vergara
  */
 public class PagoFacil extends javax.swing.JFrame {
+
     private DefaultTableModel model;
+
     /**
      * Creates new form PagoFacil
      */
@@ -153,16 +156,16 @@ public class PagoFacil extends javax.swing.JFrame {
 
         // indica cual fue la accion de usuario sobre el jfilechooser
         int resultado = selectorArchivos.showSaveDialog(this);
-        
+
         if (resultado != JFileChooser.CANCEL_OPTION) {
 
-        File fileName = selectorArchivos.getSelectedFile();
+            File fileName = selectorArchivos.getSelectedFile();
 
-        if ((fileName == null) || (fileName.getName().equals(""))) {
-            buscar_txt.setText("...");
-        } else {
-            buscar_txt.setText(fileName.getName());
-        }
+            if ((fileName == null) || (fileName.getName().equals(""))) {
+                buscar_txt.setText("...");
+            } else {
+                buscar_txt.setText(fileName.getName());
+            }
         }
     }//GEN-LAST:event_btn_buscarActionPerformed
 
@@ -171,27 +174,26 @@ public class PagoFacil extends javax.swing.JFrame {
     }//GEN-LAST:event_buscar_txtActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
         int con1 = 0;
-        
+
         try {
             // TODO add your handling code here:
-            
+
             Conexion con = new Conexion();
             con.ConexionMySQL();
-            
+
             String query = "SELECT * FROM cartera_npl ";
             //String query1 = "SELECT * FROM `recaudo` WHERE `valor`=10000";
             java.sql.ResultSet rs = con.consultar(query);
-            
+
             String data[][] = {};
-            String col[] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta","departamento", "cuidad", "saldo", "edad_mora",
+            String col[] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta", "departamento", "cuidad", "saldo", "edad_mora",
                 "datacredito", "registro_pago", "pagopazysalvo", "valor", "Fecha"};
             model = new DefaultTableModel(data, col);
             jTable1.setModel(model);
-             
-            //if(){}
 
+            //if(){}
             while (rs.next()) {
                 model.insertRow(con1, new Object[]{}); //INSERTA FILA EN TIEMPO DE EJECUCION
                 model.setValueAt(rs.getString("id"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
@@ -200,7 +202,7 @@ public class PagoFacil extends javax.swing.JFrame {
                 model.setValueAt(rs.getString("cedula"), con1, 3);
                 model.setValueAt(rs.getString("nombre"), con1, 4);
                 model.setValueAt(rs.getString("cuenta"), con1, 5);
-                model.setValueAt(rs.getString("departamento"), con1, 6);  
+                model.setValueAt(rs.getString("departamento"), con1, 6);
                 model.setValueAt(rs.getString("cuidad"), con1, 7);
                 model.setValueAt(rs.getString("saldo"), con1, 8);
                 model.setValueAt(rs.getString("edad_mora"), con1, 9);
@@ -209,7 +211,9 @@ public class PagoFacil extends javax.swing.JFrame {
                 model.setValueAt(rs.getString("pagopazysalvo"), con1, 12);
                 model.setValueAt(rs.getString("valor"), con1, 13);
                 model.setValueAt(rs.getString("Fecha"), con1, 14);
+
             }
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -219,49 +223,51 @@ public class PagoFacil extends javax.swing.JFrame {
         } catch (IllegalAccessException ex) {
             Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        
+
         int con1 = 0;
         try {
             // TODO add your handling code here:
-            
+
             Conexion con = new Conexion();
             con.ConexionMySQL();
-            
-            String query = "SELECT * FROM `cartera_npl` WHERE `cuidad` = '"+busqueda_txtx.getText()+"'";
+
+            String query = "SELECT * FROM `cartera_npl` WHERE `cuidad` = '" + busqueda_txtx.getText() + "'";
             java.sql.ResultSet rs = con.consultar(query);
-            
-            String data [][] = {};
-            String col [] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta","departamento", "cuidad", "saldo", "edad_mora",
+
+            String data[][] = {};
+            String col[] = {"id", "aliado", "operacion", "cedula", "nombre", "cuenta", "departamento", "cuidad", "saldo", "edad_mora",
                 "datacredito", "registro_pago", "pagopazysalvo", "valor", "Fecha"};
             model = new DefaultTableModel(data, col);
             jTable1.setModel(model);
-            
-            while(rs.next()){
-                model.insertRow(con1, new Object[]{});
-                model.setValueAt(rs.getString("id"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
-                model.setValueAt(rs.getString("aliado"), con1, 1);
-                model.setValueAt(rs.getString("operacion"), con1, 2);
-                model.setValueAt(rs.getString("cedula"), con1, 3);
-                model.setValueAt(rs.getString("nombre"), con1, 4);
-                model.setValueAt(rs.getString("cuenta"), con1, 5);
-                model.setValueAt(rs.getString("departamento"), con1, 6);  
-                model.setValueAt(rs.getString("cuidad"), con1, 7);
-                model.setValueAt(rs.getString("saldo"), con1, 8);
-                model.setValueAt(rs.getString("edad_mora"), con1, 9);
-                model.setValueAt(rs.getString("datacredito"), con1, 10);
-                model.setValueAt(rs.getString("registro_pago"), con1, 11);
-                model.setValueAt(rs.getString("pagopazysalvo"), con1, 12);
-                model.setValueAt(rs.getString("valor"), con1, 13);
-                model.setValueAt(rs.getString("Fecha"), con1, 14);
-                
-            
+
+            if (rs.next()) {
+                JOptionPane.showMessageDialog(this, "Busqueda Exitosa!");
+                while (rs.next()) {
+                    model.insertRow(con1, new Object[]{});
+                    model.setValueAt(rs.getString("id"), con1, 0);  // ACTUALIZA LA CELDA CON EL VALOR DE CAMPO OBTENIDO
+                    model.setValueAt(rs.getString("aliado"), con1, 1);
+                    model.setValueAt(rs.getString("operacion"), con1, 2);
+                    model.setValueAt(rs.getString("cedula"), con1, 3);
+                    model.setValueAt(rs.getString("nombre"), con1, 4);
+                    model.setValueAt(rs.getString("cuenta"), con1, 5);
+                    model.setValueAt(rs.getString("departamento"), con1, 6);
+                    model.setValueAt(rs.getString("cuidad"), con1, 7);
+                    model.setValueAt(rs.getString("saldo"), con1, 8);
+                    model.setValueAt(rs.getString("edad_mora"), con1, 9);
+                    model.setValueAt(rs.getString("datacredito"), con1, 10);
+                    model.setValueAt(rs.getString("registro_pago"), con1, 11);
+                    model.setValueAt(rs.getString("pagopazysalvo"), con1, 12);
+                    model.setValueAt(rs.getString("valor"), con1, 13);
+                    model.setValueAt(rs.getString("Fecha"), con1, 14);
+                }
+            } else {
+                JOptionPane.showMessageDialog(this, "ERROR!");
             }
-            
-            
+
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(PagoFacil.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
